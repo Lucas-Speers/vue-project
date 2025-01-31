@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, defineExpose } from 'vue';
-const emit = defineEmits(['add'])
+const emit = defineEmits(['submitModal'])
 
-const newTask = ref('')
+const text = ref('')
 const showingModal = ref(false)
 
-function addTask() {
-	emit('add', newTask.value)
-	newTask.value = ''
+function submitModal() {
+	emit('submitModal', text.value)
+	text.value = ''
 	showingModal.value = false
 }
 
@@ -15,12 +15,14 @@ defineExpose({showingModal})
 </script>
 
 <template>
-	<div v-if="showingModal" class="modal-backdrop">
-		<div class="modal">
-			<h3>Add Task</h3>
+	<div v-if="showingModal" class="modal-backdrop" @click="showingModal=false">
+		<div class="modal" @click.stop="">
+			<slot>Default Modal</slot>
 
-			<form @submit.prevent="addTask()">
-				<input v-model="newTask">
+      <button @click="showingModal=false">❌</button>
+
+			<form @submit.prevent="submitModal()">
+				<input v-model="text">
 			</form>
 
 		</div>
